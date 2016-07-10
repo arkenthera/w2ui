@@ -7957,13 +7957,15 @@ w2utils.event = {
                     ghosts = $( '.w2ui-grid-ghost' );
 
                 //start event for drag start
-                edata = obj.trigger({ type: 'columnDragEnd', phase: 'before', originalEvent: event, target: _dragData.columnHead[0] });
-                if ( edata.isCancelled === true ) return false;
+
 
                 selected = obj.columns[ _dragData.originalPos ];
                 columnConfig = obj.columns;
                 targetColumn =  $( _dragData.columns[ Math.min(_dragData.lastInt, _dragData.columns.length - 1) ] );
                 target = (_dragData.lastInt < _dragData.columns.length) ? parseInt(targetColumn.attr('col')) : columnConfig.length;
+
+                edata = obj.trigger({ type: 'columnDragEnd', phase: 'before', originalEvent: event, target: _dragData.columnHead[0],targetColumnNumber: target - 1 });
+                if ( edata.isCancelled === true ) return false;
 
                 if ( target !== _dragData.originalPos + 1 && target !== _dragData.originalPos && targetColumn && targetColumn.length ) {
                     $( _dragData.ghost ).animate({
@@ -7995,7 +7997,7 @@ w2utils.event = {
                 obj.refresh();
 
                 //conclude event
-                obj.trigger( $.extend( edata, { phase: 'after', targetColumnNumber: target - 1 } ) );
+                //obj.trigger( $.extend( edata, { phase: 'after', targetColumnNumber: target - 1 } ) );
             }
 
             function markIntersection( intersection ){
